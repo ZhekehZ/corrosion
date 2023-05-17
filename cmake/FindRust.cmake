@@ -171,7 +171,7 @@ function(_corrosion_determine_libs_new target_triple out_libs)
             endforeach()
             set(libs_list "${stripped_lib_list}")
             # Special case `msvcrt` to link with the debug version in Debug mode.
-            list(TRANSFORM libs_list REPLACE "^msvcrt$" "\$<\$<CONFIG:Debug>:msvcrtd>")
+            list(TRANSFORM libs_list REPLACE "^msvcrt$" "\$<\$<CONFIG:Debug>:msvcrt>")
         else()
             message(DEBUG "Determining required native libraries - failed: Regex match failure.")
             message(DEBUG "`native-static-libs` not found in: `${cargo_build_error_message}`")
@@ -187,7 +187,7 @@ function(_corrosion_determine_libs arch vendor os env out_libs)
         list(APPEND libs "advapi32" "userenv" "ws2_32")
 
         if(env STREQUAL "msvc")
-            list(APPEND libs "$<$<CONFIG:Debug>:msvcrtd>")
+            list(APPEND libs "$<$<CONFIG:Debug>:msvcrt>")
             # CONFIG takes a comma seperated list starting with CMake 3.19, but we still need to
             # support older CMake versions.
             set(config_is_release "$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>")
